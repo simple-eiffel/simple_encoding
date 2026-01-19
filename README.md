@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/logo.svg" alt="simple_encoding logo" width="150">
+  <img src="docs/images/logo.png" alt="simple_encoding logo" width="128">
 </p>
 
 <h1 align="center">simple_encoding</h1>
