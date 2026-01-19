@@ -4,81 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>simple_encoding - Eiffel Character Encoding Library</title>
-    <style>
-        :root {
-            --bg-color: #1a1a2e;
-            --card-bg: #16213e;
-            --text-color: #eee;
-            --accent: #7b68ee;
-            --border: #333;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
-        header { text-align: center; padding: 3rem 0; }
-        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-        .subtitle { color: #888; font-size: 1.1rem; }
-        .badges { margin: 1.5rem 0; }
-        .badges img { margin: 0 0.25rem; }
-        .card {
-            background: var(--card-bg);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            border: 1px solid var(--border);
-        }
-        .card h2 { color: var(--accent); margin-bottom: 1rem; font-size: 1.3rem; }
-        pre {
-            background: #0d1117;
-            padding: 1rem;
-            border-radius: 6px;
-            overflow-x: auto;
-            font-size: 0.9rem;
-        }
-        code { font-family: 'Monaco', 'Menlo', monospace; }
-        table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
-        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
-        th { color: var(--accent); }
-        a { color: var(--accent); text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        .nav { display: flex; gap: 2rem; justify-content: center; margin: 1rem 0; }
-        footer { text-align: center; padding: 2rem 0; color: #666; }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
         <header>
+            <img src="images/logo.svg" alt="simple_encoding" class="logo">
             <h1>simple_encoding</h1>
             <p class="subtitle">Character Encoding Library for Eiffel</p>
             <div class="badges">
                 <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License">
                 <img src="https://img.shields.io/badge/Eiffel-25.02-purple.svg" alt="Eiffel 25.02">
                 <img src="https://img.shields.io/badge/Tests-83%20passing-green.svg" alt="83 Tests">
+                <img src="https://img.shields.io/badge/DBC-Contracts-green.svg" alt="Design by Contract">
             </div>
             <nav class="nav">
+                <a href="#overview">Overview</a>
+                <a href="#quick-start">Quick Start</a>
+                <a href="#classes">Classes</a>
+                <a href="#installation">Installation</a>
                 <a href="https://github.com/simple-eiffel/simple_encoding">GitHub</a>
-                <a href="https://github.com/simple-eiffel">Simple Eiffel</a>
             </nav>
         </header>
 
-        <div class="card">
+        <section id="overview" class="card">
             <h2>Overview</h2>
             <p>SIMPLE_ENCODING provides character encoding conversion for Eiffel applications:</p>
-            <ul style="margin: 1rem 0 0 1.5rem;">
+            <ul>
                 <li><strong>UTF-8 &lt;-&gt; UTF-32</strong> - Bidirectional conversion with error handling</li>
                 <li><strong>Single-byte codecs</strong> - ISO-8859-1, ISO-8859-15, Windows-1252</li>
-                <li><strong>Encoding detection</strong> - BOM detection and heuristics</li>
-                <li><strong>Character properties</strong> - Unicode classification</li>
+                <li><strong>Encoding detection</strong> - BOM detection and heuristic analysis</li>
+                <li><strong>Character properties</strong> - Unicode character classification</li>
             </ul>
-        </div>
+        </section>
 
-        <div class="card">
+        <section id="quick-start" class="card">
             <h2>Quick Start</h2>
+            <h3>UTF-8 Conversion</h3>
 <pre><code>local
     enc: SIMPLE_ENCODING
     utf8: STRING_8
@@ -96,31 +58,8 @@ do
         print (enc.last_error)
     end
 end</code></pre>
-        </div>
 
-        <div class="card">
-            <h2>Classes</h2>
-            <table>
-                <tr><th>Class</th><th>Purpose</th></tr>
-                <tr><td>SIMPLE_ENCODING</td><td>UTF-8 &lt;-&gt; UTF-32 conversion</td></tr>
-                <tr><td>SIMPLE_CODEC</td><td>Abstract base for single-byte codecs</td></tr>
-                <tr><td>SIMPLE_ISO_8859_1_CODEC</td><td>Latin-1 (Western European)</td></tr>
-                <tr><td>SIMPLE_ISO_8859_15_CODEC</td><td>Latin-9 (Euro sign support)</td></tr>
-                <tr><td>SIMPLE_WINDOWS_1252_CODEC</td><td>Windows-1252</td></tr>
-                <tr><td>SIMPLE_CODEC_REGISTRY</td><td>Codec lookup by name</td></tr>
-                <tr><td>SIMPLE_CHARACTER_PROPERTIES</td><td>Unicode classification</td></tr>
-                <tr><td>SIMPLE_ENCODING_DETECTOR</td><td>Automatic encoding detection</td></tr>
-            </table>
-        </div>
-
-        <div class="card">
-            <h2>Installation</h2>
-<pre><code>&lt;library name="simple_encoding"
-         location="$SIMPLE_EIFFEL/simple_encoding/simple_encoding.ecf"/&gt;</code></pre>
-        </div>
-
-        <div class="card">
-            <h2>Single-Byte Codecs</h2>
+            <h3>Single-Byte Codecs</h3>
 <pre><code>local
     registry: SIMPLE_CODEC_REGISTRY
     codec: detachable SIMPLE_CODEC
@@ -135,7 +74,48 @@ do
         text := c.decode_string (bytes)
     end
 end</code></pre>
-        </div>
+        </section>
+
+        <section id="classes" class="card">
+            <h2>Classes</h2>
+            <table>
+                <thead>
+                    <tr><th>Class</th><th>Purpose</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>SIMPLE_ENCODING</code></td><td>UTF-8 &lt;-&gt; UTF-32 conversion</td></tr>
+                    <tr><td><code>SIMPLE_CODEC</code></td><td>Abstract base for single-byte codecs</td></tr>
+                    <tr><td><code>SIMPLE_ISO_8859_1_CODEC</code></td><td>Latin-1 (Western European)</td></tr>
+                    <tr><td><code>SIMPLE_ISO_8859_15_CODEC</code></td><td>Latin-9 (Euro sign support)</td></tr>
+                    <tr><td><code>SIMPLE_WINDOWS_1252_CODEC</code></td><td>Windows-1252</td></tr>
+                    <tr><td><code>SIMPLE_CODEC_REGISTRY</code></td><td>Codec lookup by name</td></tr>
+                    <tr><td><code>SIMPLE_CHARACTER_PROPERTIES</code></td><td>Unicode character classification</td></tr>
+                    <tr><td><code>SIMPLE_ENCODING_DETECTOR</code></td><td>Automatic encoding detection</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="installation" class="card">
+            <h2>Installation</h2>
+            <p>Add to your ECF file:</p>
+<pre><code>&lt;library name="simple_encoding"
+         location="$SIMPLE_EIFFEL/simple_encoding/simple_encoding.ecf"/&gt;</code></pre>
+            <p>Set the <code>SIMPLE_EIFFEL</code> environment variable to point to your Simple Eiffel libraries directory.</p>
+        </section>
+
+        <section class="card">
+            <h2>Supported Encodings</h2>
+            <table>
+                <thead>
+                    <tr><th>Encoding</th><th>Aliases</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>ISO-8859-1</td><td>latin1, latin-1</td></tr>
+                    <tr><td>ISO-8859-15</td><td>latin9, latin-9</td></tr>
+                    <tr><td>Windows-1252</td><td>cp1252, win1252</td></tr>
+                </tbody>
+            </table>
+        </section>
 
         <footer>
             <p>Part of the <a href="https://github.com/simple-eiffel">Simple Eiffel</a> ecosystem</p>

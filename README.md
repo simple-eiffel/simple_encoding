@@ -1,7 +1,11 @@
+<p align="center">
+  <img src="docs/images/logo.svg" alt="simple_encoding logo" width="150">
+</p>
+
 <h1 align="center">simple_encoding</h1>
 
 <p align="center">
-  <a href="https://simple-eiffel.github.io/simple_encoding/">Documentation</a> |
+  <a href="https://simple-eiffel.github.io/simple_encoding/">Documentation</a> •
   <a href="https://github.com/simple-eiffel/simple_encoding">GitHub</a>
 </p>
 
