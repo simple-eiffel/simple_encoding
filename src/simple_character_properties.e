@@ -12,9 +12,9 @@ note
 		
 		Also provides case conversion and ASCII checks.
 		
-		Note: This is a simplified implementation covering the most
-		common character ranges. Full Unicode property support would
-		require much larger lookup tables.
+		The classification queries cover the common ranges; general_category
+		answers from the full Unicode tables (SIMPLE_UNICODE), which also give
+		combining classes, simple case mapping and normalization forms.
 	]"
 	author: "simple_encoding"
 	date: "$Date$"
@@ -158,35 +158,24 @@ feature -- Case
 			Result := a_char.lower
 		end
 
-feature -- Unicode Categories (simplified)
+feature -- Unicode Categories
 
 	general_category (a_char: CHARACTER_32): STRING_8
-			-- Unicode general category of `a_char` (simplified)
-			-- Returns two-letter abbreviation: Lu, Ll, Lo, Nd, Zs, Po, So, Cc, Cn
+			-- The Unicode general category of `a_char' ("Lu", "Mn", "Cf", "Cn" for unassigned, ...),
+			-- from the full Unicode Character Database tables of SIMPLE_UNICODE (2026-10-27: was a
+			-- simplified guess that called every mark and format character "Cn").
 		do
-			if is_letter (a_char) then
-				if is_upper (a_char) then
-					Result := "Lu"
-				elseif is_lower (a_char) then
-					Result := "Ll"
-				else
-					Result := "Lo"
-				end
-			elseif is_digit (a_char) then
-				Result := "Nd"
-			elseif is_whitespace (a_char) then
-				Result := "Zs"
-			elseif is_punctuation (a_char) then
-				Result := "Po"
-			elseif is_symbol (a_char) then
-				Result := "So"
-			elseif is_control (a_char) then
-				Result := "Cc"
-			else
-				Result := "Cn"  -- Unassigned
-			end
+			Result := unicode.general_category (a_char)
 		ensure
 			two_chars: Result.count = 2
+		end
+
+feature {NONE} -- Implementation
+
+	unicode: SIMPLE_UNICODE
+			-- The full Unicode tables.
+		once
+			create Result.make
 		end
 
 feature -- ASCII
