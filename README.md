@@ -22,7 +22,7 @@ Part of the [Simple Eiffel](https://github.com/simple-eiffel) ecosystem.
 ## Status
 
 **Production Ready** - v2.1.0
-- 89 tests passing, including 2,897 Unicode normalization conformance cases
+- 91 tests passing, including 2,897 Unicode normalization conformance cases and a check of every character query against the Unicode categories
 - UTF-8/UTF-32 bidirectional conversion
 - ISO-8859-1, ISO-8859-15, Windows-1252 codecs
 - Encoding detection with BOM support
