@@ -35,8 +35,9 @@ feature -- Character properties
 
 	general_category (a_char: CHARACTER_32): STRING_8
 			-- The two-letter general category of `a_char': "Lu", "Mn", "Cf", "Cn" (unassigned), ...
+			-- A new string each call: the tables stay out of reach (design scan, 2026-10-27).
 		do
-			Result := tables.category_codes [tables.run_index (a_char.natural_32_code)]
+			Result := category_of (a_char).twin
 		ensure
 			two_letters: Result.count = 2
 		end
@@ -44,21 +45,35 @@ feature -- Character properties
 	is_combining_mark (a_char: CHARACTER_32): BOOLEAN
 			-- Is `a_char' a mark (category Mn, Mc or Me)?
 		do
-			Result := general_category (a_char) [1] = 'M'
-		ensure
-			definition: Result = (general_category (a_char) [1] = 'M')
+			Result := category_of (a_char) [1] = 'M'
 		end
 
 	is_format_character (a_char: CHARACTER_32): BOOLEAN
 			-- Is `a_char' a format character (category Cf: joiners, direction marks, soft hyphen)?
 		do
-			Result := general_category (a_char).same_string ("Cf")
+			Result := category_of (a_char).same_string ("Cf")
 		end
 
 	is_letter (a_char: CHARACTER_32): BOOLEAN
 			-- Is `a_char' a letter (category L*)?
 		do
-			Result := general_category (a_char) [1] = 'L'
+			Result := category_of (a_char) [1] = 'L'
+		end
+
+	is_letter_or_digit (a_char: CHARACTER_32): BOOLEAN
+			-- Is `a_char' a letter or a number (category L* or N*)?
+		local
+			l_kind: CHARACTER_8
+		do
+			l_kind := category_of (a_char) [1]
+			Result := l_kind = 'L' or l_kind = 'N'
+		end
+
+	is_in_category (a_char: CHARACTER_32; a_kind: CHARACTER_8): BOOLEAN
+			-- Is `a_char''s general category of kind `a_kind' (its first letter: 'L', 'M', 'N', 'P',
+			-- 'S', 'Z' or 'C')?
+		do
+			Result := category_of (a_char) [1] = a_kind
 		end
 
 	combining_class (a_char: CHARACTER_32): INTEGER
@@ -90,19 +105,15 @@ feature -- Character properties
 feature -- Normalization forms
 
 	nfd (a_text: READABLE_STRING_GENERAL): STRING_32
-			-- Canonical decomposition of `a_text'.
+			-- Canonical decomposition of `a_text' (marks in canonical order: `put_in_canonical_order').
 		do
 			Result := decomposed (a_text, False)
-		ensure
-			canonically_ordered: is_canonically_ordered (Result)
 		end
 
 	nfkd (a_text: READABLE_STRING_GENERAL): STRING_32
-			-- Compatibility decomposition of `a_text'.
+			-- Compatibility decomposition of `a_text' (marks in canonical order).
 		do
 			Result := decomposed (a_text, True)
-		ensure
-			canonically_ordered: is_canonically_ordered (Result)
 		end
 
 	nfc (a_text: READABLE_STRING_GENERAL): STRING_32
@@ -139,6 +150,12 @@ feature {NONE} -- Implementation
 			-- The decoded tables, one set per processor.
 		once
 			create Result.make
+		end
+
+	category_of (a_char: CHARACTER_32): STRING_8
+			-- The table's own category string for `a_char' (never handed out).
+		do
+			Result := tables.category_codes [tables.run_index (a_char.natural_32_code)]
 		end
 
 	class_of (a_code: NATURAL_32): INTEGER

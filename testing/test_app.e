@@ -175,6 +175,8 @@ feature {NONE} -- Test Execution
 			run_test (agent utility_tests.test_registry_counts, "test_registry_counts")
 			run_test (agent unicode_tests.test_general_category_full, "test_general_category_full")
 			run_test (agent unicode_tests.test_character_properties_use_the_full_table, "test_character_properties_use_the_full_table")
+			run_test (agent unicode_tests.test_classification_agrees_with_categories, "test_classification_agrees_with_categories")
+			run_test (agent unicode_tests.test_general_category_is_a_copy, "test_general_category_is_a_copy")
 			run_test (agent unicode_tests.test_combining_classes, "test_combining_classes")
 			run_test (agent unicode_tests.test_simple_case_mappings, "test_simple_case_mappings")
 			run_test (agent unicode_tests.test_normalization_conformance, "test_normalization_conformance")

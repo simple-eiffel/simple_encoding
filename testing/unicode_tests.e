@@ -47,6 +47,56 @@ feature -- Tests
 			assert ("A is still Lu", l_props.general_category ('A').same_string ("Lu"))
 		end
 
+	test_classification_agrees_with_categories
+			-- Every SIMPLE_CHARACTER_PROPERTIES query agrees with the general category, over the whole
+			-- Basic Multilingual Plane. Before (design scan, 2026-10-27): hand-written ranges called a
+			-- Hebrew vowel point a letter and U+2003 both whitespace and punctuation.
+		local
+			l_props: SIMPLE_CHARACTER_PROPERTIES
+			u: SIMPLE_UNICODE
+			c: CHARACTER_32
+			l_category: STRING_8
+			i, l_disagreements: INTEGER
+			l_first: STRING_8
+		do
+			create l_props.make
+			create u.make
+			create l_first.make_empty
+			from i := 0 until i > 0xFFFF loop
+				c := i.to_character_32
+				l_category := u.general_category (c)
+				if l_props.is_letter (c) /= (l_category [1] = 'L') or
+					l_props.is_punctuation (c) /= (l_category [1] = 'P') or
+					l_props.is_symbol (c) /= (l_category [1] = 'S') or
+					l_props.is_control (c) /= l_category.same_string ("Cc") or
+					l_props.is_upper (c) /= l_category.same_string ("Lu") or
+					l_props.is_lower (c) /= l_category.same_string ("Ll") or
+					l_props.is_whitespace (c) /= ((i >= 9 and i <= 13) or i = 0x85 or l_category [1] = 'Z')
+				then
+					l_disagreements := l_disagreements + 1
+					if l_first.is_empty then
+						l_first := i.to_hex_string
+					end
+				end
+				i := i + 1
+			end
+			assert_integers_equal ({STRING_8} "no disagreement (first: U+" + l_first + ")", 0, l_disagreements)
+			assert ("a vowel point is no letter", not l_props.is_letter ((0x05B0).to_character_32))
+			assert ("an em space is not punctuation", not l_props.is_punctuation ((0x2003).to_character_32))
+		end
+
+	test_general_category_is_a_copy
+			-- A caller changing the answer cannot change the next one.
+		local
+			u: SIMPLE_UNICODE
+			l_answer: STRING_8
+		do
+			create u.make
+			l_answer := u.general_category ('A')
+			l_answer.put ('x', 1)
+			assert ("still Lu", u.general_category ('A').same_string ("Lu"))
+		end
+
 	test_combining_classes
 		local
 			u: SIMPLE_UNICODE
