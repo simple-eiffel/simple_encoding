@@ -68,6 +68,12 @@ feature {NONE} -- Test Setup
 			create Result
 		end
 
+	unicode_tests: UNICODE_TESTS
+			-- Unicode properties and normalization suite
+		once
+			create Result
+		end
+
 feature {NONE} -- Test Execution
 
 	run_tests
@@ -167,6 +173,12 @@ feature {NONE} -- Test Execution
 			run_test (agent utility_tests.test_registry_unknown_codec, "test_registry_unknown_codec")
 			run_test (agent utility_tests.test_registry_all_codec_names, "test_registry_all_codec_names")
 			run_test (agent utility_tests.test_registry_counts, "test_registry_counts")
+			run_test (agent unicode_tests.test_general_category_full, "test_general_category_full")
+			run_test (agent unicode_tests.test_character_properties_use_the_full_table, "test_character_properties_use_the_full_table")
+			run_test (agent unicode_tests.test_combining_classes, "test_combining_classes")
+			run_test (agent unicode_tests.test_simple_case_mappings, "test_simple_case_mappings")
+			run_test (agent unicode_tests.test_normalization_conformance, "test_normalization_conformance")
+			run_test (agent unicode_tests.test_hangul_round_trip, "test_hangul_round_trip")
 		end
 
 feature {NONE} -- Implementation

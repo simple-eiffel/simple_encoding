@@ -21,11 +21,12 @@ Part of the [Simple Eiffel](https://github.com/simple-eiffel) ecosystem.
 
 ## Status
 
-**Production Ready** - v2.0.0
-- 83 tests passing
+**Production Ready** - v2.1.0
+- 89 tests passing, including 2,897 Unicode normalization conformance cases
 - UTF-8/UTF-32 bidirectional conversion
 - ISO-8859-1, ISO-8859-15, Windows-1252 codecs
 - Encoding detection with BOM support
+- Full Unicode 15.1.0 general categories, combining classes, simple case mapping, and NFD/NFC/NFKD/NFKC (`SIMPLE_UNICODE`)
 - Design by Contract throughout
 
 ## Overview
@@ -36,6 +37,7 @@ SIMPLE_ENCODING provides character encoding conversion for Eiffel applications:
 - **Single-byte codecs** - ISO-8859-1 (Latin-1), ISO-8859-15 (Latin-9), Windows-1252
 - **Encoding detection** - BOM detection and heuristic analysis
 - **Character properties** - Unicode character classification
+- **Unicode normalization** - NFD, NFC, NFKD and NFKC, general categories and case mapping from the Unicode Character Database
 
 ## Quick Start
 
@@ -133,6 +135,25 @@ do
 end
 ```
 
+### Unicode Normalization
+
+```eiffel
+local
+    u: SIMPLE_UNICODE
+do
+    create u.make
+    print (u.nfd ("é").count)                       -- 2: "e" and a combining acute
+    print (u.nfc (u.nfd ("é")).count)                -- 1
+    print (u.general_category ({CHARACTER_32} '%/0x05B0/'))  -- "Mn" (a Hebrew vowel point)
+    print (u.simple_lower ({CHARACTER_32} '%/0x03A3/'))      -- the Greek small sigma
+end
+```
+
+The tables are generated from the Unicode Character Database by `tools/generate_unicode_data.py`
+(a build tool; the library reads no file at run time). To move to a new Unicode version, download
+`UnicodeData.txt`, `DerivedNormalizationProps.txt` and `NormalizationTest.txt` for it and rerun the
+script.
+
 ## Classes
 
 | Class | Purpose |
@@ -144,6 +165,8 @@ end
 | SIMPLE_WINDOWS_1252_CODEC | Windows-1252 codec |
 | SIMPLE_CODEC_REGISTRY | Codec lookup by name |
 | SIMPLE_CHARACTER_PROPERTIES | Unicode character classification |
+| SIMPLE_UNICODE | Unicode categories, combining classes, case mapping, NFD/NFC/NFKD/NFKC |
+| SIMPLE_UNICODE_DATA | The generated Unicode Character Database tables |
 | SIMPLE_ENCODING_DETECTOR | Automatic encoding detection |
 
 ## Installation
